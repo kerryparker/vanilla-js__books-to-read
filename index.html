@@ -1,7 +1,6 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <script src="./script.js"></script>
     <link rel="stylesheet" type="text/css" href="./main.css" />
   </head>
   <body>
@@ -13,8 +12,17 @@
         </div>
         <div id="searchResultHolder"></div>
       </div>
-      <div class="center-block" id="bookInfoHolder"></div>
-      <div class="right-block" id="readListHolder">ToRead List...</div>
+      <div class="center-block" id="bookInfoHolder">
+          <h1>Titles and subtitles... some info</h1>
+          <button id="addButton">Add book to Read List</button>
+        </div>
+      <div class="right-block" id="readListHolder">
+          <div>
+              <h2>To Read List......</h2>
+              <p>3 books, 1 read</p>
+          </div>
+      </div>
     </div>
+    <script src="./script.js" defer></script>
   </body>
 </html>
