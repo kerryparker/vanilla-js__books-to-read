@@ -28,10 +28,10 @@ class BooksUI {
 
   constructor(api) {
     this.api = api;
-    this.setListeners();
+    this.getBooks();
   }
 
-  setListeners() {
+  getBooks() {
     this.goBtn.addEventListener("click", () => {
       this.api.searchBooks(this.input.value, 1).then(booksPage => {
         this.processBooksPage(booksPage);
@@ -39,20 +39,27 @@ class BooksUI {
     });
 
     this.booksResults.addEventListener("click", event => {
-      const bookId = event.target.id;
+      const div = event.target;
+      const bookId = div.id;
       this.currBook = this.books.find(b => b.id === bookId);
       if (!this.currBook) {
         // click on something else
         return false;
+      } 
+      if (this.currBook) {
+        const currBook = this.booksResults.querySelector("#" + this.currBook.id);
+        currBook.classList.remove("select-book");
       }
+      div.classList.add("select-book");
       this.displayBookInfo(this.currBook);
+      console.log(this.currBook)
     });
-
-    this.setAddButtonListener();
-    this.setMarkRemoveButtonListener();
+    
+    this.addBookToList();
+    this.markAndRemoveBooks();
   }
 
-  setAddButtonListener() {
+  addBookToList() {
     this.addButton = document.getElementById("addButton");
     this.addButton.addEventListener("click", () => {
       if (this.currBook != null) {
@@ -70,7 +77,7 @@ class BooksUI {
     });
   }
 
-  setMarkRemoveButtonListener() {
+  markAndRemoveBooks() {
     this.readList.addEventListener("click", event => {
       const item = event.target;
       const listItem = item.parentElement;
@@ -106,22 +113,22 @@ class BooksUI {
   displayBookInfo(bookInfo) {
     if (bookInfo.publisher != null && bookInfo.isbn != null) {
       if (bookInfo.publisher.length > 4 && bookInfo.isbn.length > 4) {
-        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 1);
+        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 1);
       } else if (bookInfo.publisher.length > 4) {
-        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 2);
+        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 2);
       } else if (bookInfo.isbn.length > 4) {
-        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 3);
+        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 3);
       } else {
-        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 4);
+        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 4);
       }
     } else {
-      bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, -1);
+      bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, -1);
     }
-    this.setAddButtonListener();
+    this.addBookToList();
     this.setCollapsing();
   }
 
-  getBookingInfoHtml(bookInfo, type) {
+  getBookInfoHtml(bookInfo, type) {
     let subtitle = "";
     if (bookInfo.subtitle != null) {
       subtitle = bookInfo.subtitle;
