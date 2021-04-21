@@ -23,15 +23,16 @@ class BooksUI {
   api;
   books;
   currBook;
+  selectedBookDiv;
   doneCounter = 0;
   bookCounter = 0;
 
   constructor(api) {
     this.api = api;
-    this.getBooks();
+    this.setListeners();
   }
 
-  getBooks() {
+  setListeners() {
     this.goBtn.addEventListener("click", () => {
       this.api.searchBooks(this.input.value, 1).then(booksPage => {
         this.processBooksPage(booksPage);
@@ -39,37 +40,43 @@ class BooksUI {
     });
 
     this.booksResults.addEventListener("click", event => {
-      const div = event.target;
-      const bookId = div.id;
+      const bookId = event.target.id;
       this.currBook = this.books.find(b => b.id === bookId);
       if (!this.currBook) {
         // click on something else
         return false;
-      } 
-      if (this.currBook) {
-        const currBook = this.booksResults.querySelector("#" + this.currBook.id);
-        currBook.classList.remove("select-book");
       }
-      div.classList.add("select-book");
+
+      const currentDiv = this.booksResults.querySelector(
+        "#" + this.currBook.id
+      );
+      currentDiv.classList.add("select-book");
+
+      if (this.selectedBookDiv != null && this.selectedBookDiv != currentDiv) {
+        this.selectedBookDiv.classList.remove("select-book");
+      }
+      this.selectedBookDiv = currentDiv;
+
       this.displayBookInfo(this.currBook);
-      console.log(this.currBook)
     });
-    
-    this.addBookToList();
-    this.markAndRemoveBooks();
+
+    this.setAddButtonListener();
+    this.setMarkRemoveButtonListener();
   }
 
-  addBookToList() {
+  setAddButtonListener() {
     this.addButton = document.getElementById("addButton");
-    this.addButton.addEventListener("click", () => {
+    this.addButton.addEventListener("click", event => {
       if (this.currBook != null) {
         console.log(this.currBook);
         event.preventDefault();
         let div = document.createElement("div");
         div.classList.add("read-list__item");
         div.innerHTML = `<p class="read-list__title">${this.currBook.title}</p>
-        <p class="read-list__author">${this.currBook.author_name.join(", ")}</p>
-        <button class="mark-btn">Mark as read</button><button class="remove-btn">Remove from list</button>`;
+          <p class="read-list__author">${this.currBook.author_name.join(
+            ", "
+          )}</p>
+          <button class="mark-btn">Mark as read</button><button class="remove-btn">Remove from list</button>`;
         this.readList.appendChild(div);
         this.bookCounter++;
         this.btnBookCounter.innerText = this.bookCounter;
@@ -77,7 +84,7 @@ class BooksUI {
     });
   }
 
-  markAndRemoveBooks() {
+  setMarkRemoveButtonListener() {
     this.readList.addEventListener("click", event => {
       const item = event.target;
       const listItem = item.parentElement;
@@ -113,22 +120,22 @@ class BooksUI {
   displayBookInfo(bookInfo) {
     if (bookInfo.publisher != null && bookInfo.isbn != null) {
       if (bookInfo.publisher.length > 4 && bookInfo.isbn.length > 4) {
-        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 1);
+        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 1);
       } else if (bookInfo.publisher.length > 4) {
-        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 2);
+        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 2);
       } else if (bookInfo.isbn.length > 4) {
-        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 3);
+        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 3);
       } else {
-        bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, 4);
+        bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, 4);
       }
     } else {
-      bookInfoHolder.innerHTML = this.getBookInfoHtml(bookInfo, -1);
+      bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, -1);
     }
-    this.addBookToList();
+    this.setAddButtonListener();
     this.setCollapsing();
   }
 
-  getBookInfoHtml(bookInfo, type) {
+  getBookingInfoHtml(bookInfo, type) {
     let subtitle = "";
     if (bookInfo.subtitle != null) {
       subtitle = bookInfo.subtitle;
