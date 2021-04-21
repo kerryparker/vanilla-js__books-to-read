@@ -78,6 +78,7 @@ class BooksUI {
           )}</p>
           <button class="mark-btn">Mark as read</button><button class="remove-btn">Remove from list</button>`;
         this.readList.appendChild(div);
+        this.saveLocalBooks(div.innerHTML);
         this.bookCounter++;
         this.btnBookCounter.innerText = this.bookCounter;
       }
@@ -185,6 +186,23 @@ class BooksUI {
         }
       });
     }
+  }
+
+  saveLocalBooks(item) {
+    let items;
+    if(localStorage.getItem('items') === null) {
+      items = [];
+  } else {
+    items = JSON.parse(localStorage.getItem('items'));
+  }
+
+  items.push(item);
+  localStorage.setItem('items', JSON.stringify(items));
+  localStorage.clear();
+  }
+
+  getLocalBooks() {
+
   }
 }
 

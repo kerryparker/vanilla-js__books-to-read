@@ -7,12 +7,17 @@
   <body>
     <div class="app-holder">
       <div class="left-block">
-        <div>
+        <div class="search-bar">
           <input id="searchInput" class="search-input" />
           <button id="goButton">Go!</button>
         </div>
         <div id="searchResultHolder"></div>
       </div>
+      <div class="nav-bar">
+          <p><span>Found: 168</span><span>Start: 100</span><span>Page size: 100</span></p>
+          <button class="nav-bar__prev-btn">Prev results</button>
+          <button class="nav-next-btn">Next results</button>
+        </div>
       <div class="center-block" id="bookInfoHolder">
           <h1>Titles and subtitles... some info</h1>
           <button id="addButton">Add book to Read List</button>

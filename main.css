@@ -15,12 +15,68 @@ h4 {
 
 .app-holder {
   display: flex;
+  height: 100vh; 
 }
 
 .left-block {
   flex: 0 1 25%;
   border: 2px solid #9acd32;
   padding: 0px 20px;
+  overflow-y: auto;
+  height: 90%;
+  scrollbar-color: rgba(126, 170, 38, 0.6) white;
+}
+
+.search-bar {
+  position: fixed;
+}
+
+.search-bar input {
+  border: 1px solid gray;
+  border-radius: 3px;
+  outline: none;
+  padding: 5px;
+}
+
+#goButton {
+  background: #688b21;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  height: 30px;
+  width: 30px;
+}
+
+#searchResultHolder {
+  margin-top: 55px;
+}
+
+.nav-bar {
+  background: #688b21;
+  height: 10%;
+  width: 25%;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+.nav-bar__prev-btn{
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: arial, sans-serif;
+  color: #069;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.nav-next-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: arial, sans-serif;
+  color: #069;
+  cursor: pointer;
 }
 
 .search-input {
@@ -56,6 +112,12 @@ h4 {
   border: 2px solid #9acd32;
   flex-direction: column;
   padding-top: 20px;
+}
+
+.right-block__header {
+  padding-left: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #9acd32;
 }
 
 .read-list__item {
