@@ -23,6 +23,7 @@ h4 {
   border: 2px solid #9acd32;
   padding: 0px 20px;
   overflow-y: auto;
+  overflow-y: auto;
   height: 90%;
   scrollbar-color: rgba(126, 170, 38, 0.6) white;
 }

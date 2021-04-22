@@ -30,18 +30,19 @@ class BooksUI {
   constructor(api) {
     this.api = api;
     this.setListeners();
+    this.getLocalBooks();
   }
 
   setListeners() {
     this.goBtn.addEventListener("click", () => {
-      this.api.searchBooks(this.input.value, 1).then(booksPage => {
+      this.api.searchBooks(this.input.value, 1).then((booksPage) => {
         this.processBooksPage(booksPage);
       });
     });
 
-    this.booksResults.addEventListener("click", event => {
+    this.booksResults.addEventListener("click", (event) => {
       const bookId = event.target.id;
-      this.currBook = this.books.find(b => b.id === bookId);
+      this.currBook = this.books.find((b) => b.id === bookId);
       if (!this.currBook) {
         // click on something else
         return false;
@@ -66,7 +67,7 @@ class BooksUI {
 
   setAddButtonListener() {
     this.addButton = document.getElementById("addButton");
-    this.addButton.addEventListener("click", event => {
+    this.addButton.addEventListener("click", (event) => {
       if (this.currBook != null) {
         console.log(this.currBook);
         event.preventDefault();
@@ -86,11 +87,12 @@ class BooksUI {
   }
 
   setMarkRemoveButtonListener() {
-    this.readList.addEventListener("click", event => {
+    this.readList.addEventListener("click", (event) => {
       const item = event.target;
       const listItem = item.parentElement;
       console.log(`className: ${item.className}`);
       if (item.className === "remove-btn") {
+        this.removeLocalBooks(listItem.innerHTML);
         listItem.remove();
         this.bookCounter--;
         this.btnBookCounter.innerText = this.bookCounter;
@@ -107,7 +109,7 @@ class BooksUI {
 
   processBooksPage(booksPage) {
     this.books = booksPage.docs;
-    this.books.forEach(item => {
+    this.books.forEach((item) => {
       item.id = item.key.split("/").pop();
     });
     let elementsStr = this.books.reduce((acc, curr) => {
@@ -176,7 +178,7 @@ class BooksUI {
   setCollapsing() {
     let collapse = document.getElementsByClassName("collapsible");
     for (let i = 0; i < collapse.length; i++) {
-      collapse[i].addEventListener("click", function() {
+      collapse[i].addEventListener("click", function () {
         this.classList.toggle("active");
         let content = this.nextElementSibling;
         if (content.style.display === "block") {
@@ -190,21 +192,45 @@ class BooksUI {
 
   saveLocalBooks(item) {
     let items;
-    if(localStorage.getItem('items') === null) {
+    if (localStorage.getItem("items") === null) {
       items = [];
-  } else {
-    items = JSON.parse(localStorage.getItem('items'));
-  }
+    } else {
+      items = JSON.parse(localStorage.getItem("items"));
+    }
 
-  items.push(item);
-  localStorage.setItem('items', JSON.stringify(items));
-  localStorage.clear();
+    items.push(item);
+    localStorage.setItem("items", JSON.stringify(items));
+    //localStorage.clear();
   }
 
   getLocalBooks() {
+      let items;
+    if (localStorage.getItem("items") === null) {
+      items = [];
+    } else {
+      items = JSON.parse(localStorage.getItem("items"));
+    }
+    items.forEach((item) => {
+      let div = document.createElement("div");
+      div.classList.add("read-list__item");
+      div.innerHTML = item;
+      this.readList.appendChild(div);
+    })
+    this.bookCounter = items.length;
+    this.btnBookCounter.innerText = this.bookCounter;
+  }
 
+  removeLocalBooks(item) {
+    let items;
+    if (localStorage.getItem("items") === null) {
+      items = [];
+    } else {
+      items = JSON.parse(localStorage.getItem("items"));
+    }
+    const itemIndex = item;
+    items.splice(items.indexOf(itemIndex), 1);
+    localStorage.setItem('items', JSON.stringify(items));
   }
 }
-
 
 const bookListComponent = new BooksUI(new Api());
