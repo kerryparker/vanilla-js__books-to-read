@@ -12,6 +12,8 @@ class BooksUI {
   goBtn = document.getElementById("goButton");
   input = document.getElementById("searchInput");
   booksResults = document.getElementById("searchResultHolder");
+  prevBtn = document.querySelector(".nav-prev-btn");
+  nextBtn = document.querySelector(".nav-next-btn");
   /* center panel */
   addButton = document.getElementById("addButton");
   bookInfoHolder = document.getElementById("bookInfoHolder");
@@ -21,28 +23,46 @@ class BooksUI {
   btnBookCounter = document.querySelector(".books-counter");
 
   api;
-  books;
+  collapseHelper;
+  booksResponse;
   currBook;
   selectedBookDiv;
   doneCounter = 0;
   bookCounter = 0;
+  page = 1;
 
-  constructor(api) {
+  constructor(api, collapseHelper) {
     this.api = api;
+    this.collapseHelper = collapseHelper;
     this.setListeners();
     this.getLocalBooks();
   }
 
   setListeners() {
     this.goBtn.addEventListener("click", () => {
-      this.api.searchBooks(this.input.value, 1).then((booksPage) => {
-        this.processBooksPage(booksPage);
-      });
+      this.searchBooks();
+    });
+    
+    this.prevBtn.addEventListener("click", () => {
+      if (this.page > 1) {
+        this.page--;
+        this.searchBooks();
+      }
     });
 
-    this.booksResults.addEventListener("click", (event) => {
+    this.nextBtn.addEventListener("click", () => {
+      if (
+        this.booksResponse &&
+        this.booksResponse.start + 100 <= this.booksResponse.numFound
+      ) {
+        this.page++;
+        this.searchBooks();
+      }
+    });
+
+    this.booksResults.addEventListener("click", event => {
       const bookId = event.target.id;
-      this.currBook = this.books.find((b) => b.id === bookId);
+      this.currBook = this.booksResponse.docs.find(b => b.id === bookId);
       if (!this.currBook) {
         // click on something else
         return false;
@@ -63,6 +83,13 @@ class BooksUI {
 
     this.setAddButtonListener();
     this.setMarkRemoveButtonListener();
+  }
+
+  searchBooks() {
+    this.api.searchBooks(this.input.value, this.page).then(booksPage => {
+      this.processBooksPage(booksPage);
+      this.updateBottomNavBar(booksPage);
+    });
   }
 
   setAddButtonListener() {
@@ -108,16 +135,23 @@ class BooksUI {
   }
 
   processBooksPage(booksPage) {
-    this.books = booksPage.docs;
-    this.books.forEach((item) => {
+    this.booksResponse = booksPage;
+    this.booksResponse.docs.forEach(item => {
       item.id = item.key.split("/").pop();
     });
-    let elementsStr = this.books.reduce((acc, curr) => {
+    let elementsStr = this.booksResponse.docs.reduce((acc, curr) => {
       return (
         acc + `<div id="${curr.id}" class="book-short">${curr.title}</div>`
       );
     }, "");
     this.booksResults.innerHTML = elementsStr;
+  }
+
+  updateBottomNavBar(booksPage) {
+    const pageInfo = document.querySelector(".page-info");
+    pageInfo.innerHTML = `<span>Found: ${booksPage.numFound} </span>
+      <span>Start: ${booksPage.start} </span>
+      <span>Page size: 100</span>`;
   }
 
   displayBookInfo(bookInfo) {
@@ -135,7 +169,7 @@ class BooksUI {
       bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, -1);
     }
     this.setAddButtonListener();
-    this.setCollapsing();
+    this.collapseHelper.setCollapsing("collapsible");
   }
 
   getBookingInfoHtml(bookInfo, type) {
@@ -143,10 +177,14 @@ class BooksUI {
     if (bookInfo.subtitle != null) {
       subtitle = bookInfo.subtitle;
     }
+    let authors =
+      bookInfo && bookInfo.author_name
+        ? bookInfo.author_name.join(", ")
+        : "N/A";
     let result = `
         <h2>${bookInfo.title}</h2>
         <h4>${subtitle}</h4>
-        <h4>By ${bookInfo.author_name.join(", ")}</h4>
+        <h4>By ${authors}</h4>
         <p>Full text available: <b>${bookInfo.has_fulltext}</b></p>
         <p>Type: <b>${bookInfo.type}</b></p>`;
     switch (type) {
@@ -173,21 +211,6 @@ class BooksUI {
     }
     result += `<button id="addButton">Add book to Read List</button>`;
     return result;
-  }
-
-  setCollapsing() {
-    let collapse = document.getElementsByClassName("collapsible");
-    for (let i = 0; i < collapse.length; i++) {
-      collapse[i].addEventListener("click", function () {
-        this.classList.toggle("active");
-        let content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-      });
-    }
   }
 
   saveLocalBooks(item) {
@@ -233,4 +256,21 @@ class BooksUI {
   }
 }
 
-const bookListComponent = new BooksUI(new Api());
+class CollapseHelper {
+  setCollapsing(className) {
+   let collapse = document.getElementsByClassName(className);
+   for (let i = 0; i < collapse.length; i++) {
+     collapse[i].addEventListener("click", function() {
+       this.classList.toggle("active");
+       let content = this.nextElementSibling;
+       if (content.style.display === "block") {
+         content.style.display = "none";
+       } else {
+         content.style.display = "block";
+       }
+     });
+   }
+ }
+}
+
+const bookListComponent = new BooksUI(new Api(), new CollapseHelper());
