@@ -41,7 +41,7 @@ class BooksUI {
     this.goBtn.addEventListener("click", () => {
       this.searchBooks();
     });
-    
+
     this.prevBtn.addEventListener("click", () => {
       if (this.page > 1) {
         this.page--;
@@ -59,9 +59,9 @@ class BooksUI {
       }
     });
 
-    this.booksResults.addEventListener("click", event => {
+    this.booksResults.addEventListener("click", (event) => {
       const bookId = event.target.id;
-      this.currBook = this.booksResponse.docs.find(b => b.id === bookId);
+      this.currBook = this.booksResponse.docs.find((b) => b.id === bookId);
       if (!this.currBook) {
         // click on something else
         return false;
@@ -85,7 +85,7 @@ class BooksUI {
   }
 
   searchBooks() {
-    this.api.searchBooks(this.input.value, this.page).then(booksPage => {
+    this.api.searchBooks(this.input.value, this.page).then((booksPage) => {
       this.processBooksPage(booksPage);
       this.updateBottomNavBar(booksPage);
     });
@@ -135,7 +135,7 @@ class BooksUI {
 
   processBooksPage(booksPage) {
     this.booksResponse = booksPage;
-    this.booksResponse.docs.forEach(item => {
+    this.booksResponse.docs.forEach((item) => {
       item.id = item.key.split("/").pop();
     });
     let elementsStr = this.booksResponse.docs.reduce((acc, curr) => {
@@ -226,7 +226,7 @@ class BooksUI {
   }
 
   getLocalBooks() {
-      let items;
+    let items;
     if (localStorage.getItem("items") === null) {
       items = [];
     } else {
@@ -237,7 +237,7 @@ class BooksUI {
       div.classList.add("read-list__item");
       div.innerHTML = item;
       this.readList.appendChild(div);
-    })
+    });
     this.bookCounter = items.length;
     this.btnBookCounter.innerText = this.bookCounter;
   }
@@ -251,25 +251,25 @@ class BooksUI {
     }
     const itemIndex = item;
     items.splice(items.indexOf(itemIndex), 1);
-    localStorage.setItem('items', JSON.stringify(items));
+    localStorage.setItem("items", JSON.stringify(items));
   }
 }
 
 class CollapseHelper {
   setCollapsing(className) {
-   let collapse = document.getElementsByClassName(className);
-   for (let i = 0; i < collapse.length; i++) {
-     collapse[i].addEventListener("click", function() {
-       this.classList.toggle("active");
-       let content = this.nextElementSibling;
-       if (content.style.display === "block") {
-         content.style.display = "none";
-       } else {
-         content.style.display = "block";
-       }
-     });
-   }
- }
+    let collapse = document.getElementsByClassName(className);
+    for (let i = 0; i < collapse.length; i++) {
+      collapse[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        let content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+  }
 }
 
 const bookListComponent = new BooksUI(new Api(), new CollapseHelper());

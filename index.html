@@ -3,31 +3,37 @@
     <meta charset="UTF-8" />
     <script src="./books-ui.js" defer></script>
     <link rel="stylesheet" type="text/css" href="./main.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">  </head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+      crossorigin="anonymous"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet"/>
+  </head>
   <body>
     <div class="app-holder">
       <div class="left-wrapper">
-      <div class="search-bar">
-        <input id="searchInput" class="search-input" />
-        <button id="goButton">Go</button>
-      </div>
-      <div class="left-block">
-        <div id="searchResultHolder"></div>
-      </div>
-      <div class="nav-bar">
-        <p class="page-info">
-          <span>Found: 0 </span><span>Start: 0 </span><span>Page size: 100 </span>
-        </p>
-        <div class="nav-btns">
-          <i class="fas fa-long-arrow-alt-left fa-3x"></i>
-          <button class="nav-prev-btn">Prev</button>
-          <button class="nav-next-btn">Next</button>
-          <i class="fas fa-long-arrow-alt-right fa-3x"></i>
+        <div class="search-bar">
+          <input id="searchInput" class="search-input" />
+          <button id="goButton">Go</button>
+        </div>
+        <div class="left-block">
+          <div id="searchResultHolder"></div>
+        </div>
+        <div class="nav-bar">
+          <p class="page-info">
+            <span>Found: 0 </span><span>Start: 0 </span
+            ><span>Page size: 100 </span>
+          </p>
+          <div class="nav-btns">
+            <i class="fas fa-long-arrow-alt-left fa-3x"></i>
+            <button class="nav-prev-btn">Prev</button>
+            <button class="nav-next-btn">Next</button>
+            <i class="fas fa-long-arrow-alt-right fa-3x"></i>
+          </div>
         </div>
       </div>
-    </div>
       <div class="center-block" id="bookInfoHolder">
         <i class="fas fa-book-open fa-7x"></i>
       </div>
