@@ -251,32 +251,53 @@ h4 {
 .right-block {
   flex: 0 1 25%;
   flex-direction: column;
-  background: #383838;
+  background: #212121;
 }
 
 .right-block__header {
   padding: 8px 20px;
-  background: #383838;
+  background: #212121;
   border-bottom: #c495fd;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .read-list__item {
-  border-bottom: 2px solid #c495fd;
-  padding: 10px 20px;
+  background: #383838;
+  border-radius: 10px;
+  padding: 20px 20px;
+  height: 75px;
+  display: flex;
+  flex-direction: row;
+  justify-content: first baseline; 
+  margin-bottom: 5px;
+}
+
+.read-list__item:hover {
+  background: #121212;
 }
 
 .read-list__author {
   color: #aaaaaa;
 }
 
-.mark-btn {
-  background: none;
+.mark-btn, 
+.remove-btn{
+  background: #414040;
   border: none;
-  padding: 0;
-  font-family: "Roboto", sans-serif;
+  border-radius: 2px;
+  padding: 5px;
+  width: 35px;
+  height: 35px;
   color: #c495fd;
   cursor: pointer;
-  margin-right: 10px;
+}
+
+.mark-btn:hover, 
+.remove-btn:hover {
+  background: #c495fd;
+  color: #121212;
 }
 
 .marked-item {
@@ -285,12 +306,7 @@ h4 {
   padding: 20px;
 }
 
-.remove-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: "Roboto", sans-serif;
-  color: #c495fd;
-  cursor: pointer;
-  margin-right: 10px;
+.fa-minus-square,
+.fa-check {
+  pointer-events: none;
 }

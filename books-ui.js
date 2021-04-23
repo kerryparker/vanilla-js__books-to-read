@@ -101,9 +101,9 @@ class BooksUI {
         let authors = this.currBook && this.currBook.author_name
             ? this.currBook.author_name.join(", ")
             : "N/A";
-        div.innerHTML = `<p class="read-list__title">${this.currBook.title}</p>
-          <p class="read-list__author">${authors}</p>
-          <button class="mark-btn">Mark as read</button><button class="remove-btn">Remove from list</button>`;
+        div.innerHTML = `<div><p class="read-list__title">${this.currBook.title}</p>
+          <p class="read-list__author">${authors}</p></div>
+          <button class="mark-btn"><i class="fas fa-check"></i></button><button class="remove-btn"><i class="fas fa-minus-square"></i></button>`;
         this.readList.appendChild(div);
         this.saveLocalBooks(div.innerHTML);
         this.bookCounter++;
