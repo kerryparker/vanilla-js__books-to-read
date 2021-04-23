@@ -15,7 +15,6 @@ class BooksUI {
   prevBtn = document.querySelector(".nav-prev-btn");
   nextBtn = document.querySelector(".nav-next-btn");
   /* center panel */
-  addButton = document.getElementById("addButton");
   bookInfoHolder = document.getElementById("bookInfoHolder");
   /* right panel */
   readList = document.getElementById("readListHolder");
@@ -81,7 +80,7 @@ class BooksUI {
       this.displayBookInfo(this.currBook);
     });
 
-    this.setAddButtonListener();
+    // this.setAddButtonListener();
     this.setMarkRemoveButtonListener();
   }
 
@@ -185,28 +184,28 @@ class BooksUI {
         <h2>${bookInfo.title}</h2>
         <h4>${subtitle}</h4>
         <h4>By ${authors}</h4>
-        <p>Full text available: <b>${bookInfo.has_fulltext}</b></p>
-        <p>Type: <b>${bookInfo.type}</b></p>`;
+        <p>Full text available: ${bookInfo.has_fulltext}</p>
+        <p>Type: ${bookInfo.type}</p>`;
     switch (type) {
       case 1:
-        result += `<p class="collapsible">Publisher: <b>Click to show</b></p>
+        result += `<p class="collapsible">Publisher: <span>Click to show</span></p>
           <div class="content"><p>${bookInfo.publisher.join(", ")}</p></div>
-          <p class="collapsible">ISBN: <b>Click to show</b></p>
+          <p class="collapsible">ISBN: <span>Click to show</span></p>
           <div class="content"><p>${bookInfo.isbn.join(", ")}</p></div>`;
         break;
       case 2:
-        result += `<p class="collapsible">Publisher: <b>Click to show</b></p>
+        result += `<p class="collapsible">Publisher: <span>Click to show</span></p>
         <div class="content"> <p>${bookInfo.publisher.join(", ")}</p></div>
         <p>ISBN: <b>${bookInfo.isbn.join(", ")}</b></p>`;
         break;
       case 3:
-        result += `<p>Publisher: <b>${bookInfo.publisher.join(", ")}</b></p>
-        <p class="collapsible">ISBN: <b>Click to show</b></p>
+        result += `<p>Publisher: ${bookInfo.publisher.join(", ")}</p>
+        <p class="collapsible">ISBN: <span>Click to show</span></p>
         <div class="content"><p>${bookInfo.isbn.join(", ")}</p></div>`;
         break;
       case 4:
-        result += `<p>Publisher: <b>${bookInfo.publisher.join(", ")}</b></p>
-        <p>ISBN: <b>${bookInfo.isbn.join(", ")}</b></p>`;
+        result += `<p>Publisher: ${bookInfo.publisher.join(", ")}</p>
+        <p>ISBN: ${bookInfo.isbn.join(", ")}</p>`;
         break;
     }
     result += `<button id="addButton">Add book to Read List</button>`;

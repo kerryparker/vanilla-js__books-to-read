@@ -23,12 +23,14 @@ h4 {
   display: flex;
   height: 100vh; 
   min-width: 655px;
+  min-height: 475px;
 }
 
 .left-wrapper {
   display: flex;
   flex: 0 1 25%;
   flex-direction: column;
+  min-height: 475px;
 }
 
 
@@ -42,18 +44,24 @@ h4 {
 }
 
 .search-input { 
-  height: 30px;
+  height: 35px;
   margin-top: 5px;
   margin-right: 5px;
-  border: none;
-  border-radius: 8px;
+  border: 1px solid #121212;
+  border-radius: 6px;
   outline: none;
-  padding: 5px;
+  padding: 3px;
   align-self: baseline;
   width: auto;
   background: #2c2c2c;
   color: white;
   font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+
+.search-input:hover,
+.search-input:focus {
+  border: 1px solid #c495fd;
 }
 
 #goButton {
@@ -61,7 +69,8 @@ h4 {
   border: none;
   border-radius: 5px;
   color: #c495fd;
-  height: 30px;
+  background: #2d2e2f;
+  height: 34px;
   width: 45px;
   margin-top: 5px;
   font-family: 'Roboto', sans-serif;
@@ -69,11 +78,7 @@ h4 {
   font-size: 16px;
 }
 
-#goButton:hover {
-  background: #2d2e2f;
-  color: #c495fd;
-}
-
+#goButton:hover, 
 #goButton:active {
   background: #c495fd;
   color: #121212;
@@ -84,7 +89,7 @@ h4 {
   padding: 20px 20px;
   overflow-y: auto;
   scrollbar-color: black #383838;
-  height: 80%;
+  height: 77%;
 }
 .book-short {
   padding: 5px;
@@ -107,18 +112,18 @@ h4 {
 }
 
 .nav-bar {
-  height: 10%;
+  height: 13%;
   background: #121212;
   min-width: 245px;
   color: white;
-  padding: 15px;
+  /* padding: 20px; */
   display: flex;
   justify-content: center;
   flex-direction: column-reverse;
 }
 
 .nav-bar p {
-  padding: 0px;
+  padding-left: 10px;
 }
 
 .nav-bar span {
@@ -135,14 +140,15 @@ h4 {
   background: none;
   border: none;
   border-radius: 5px;
-  padding: 5px;
+  padding: 8px;
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
   font-size: 16px;
   color: #c495fd;
+  background: #2d2e2f;
   cursor: pointer;
   height: 33px;
-  width: 45px;
+  /* width: 45px; */
   margin-left: 20px;
   margin-top: 5px;
 }
@@ -152,17 +158,12 @@ h4 {
 }
 
 .nav-next-btn:hover,
-.nav-prev-btn:hover {
-  background: #2d2e2f;
-  color: #c495fd;
-}
-
+.nav-prev-btn:hover, 
 .nav-next-btn:active,
 .nav-prev-btn:active {
   background: #c495fd;
   color: #121212;
 }
-
 
 .fa-long-arrow-alt-left {
   color: #383838;
@@ -181,22 +182,70 @@ h4 {
   border-right: none;
   padding: 20px;
   font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.fa-book-open {
+  align-self: center;
+  margin-top: 40%;
+  color: #414040;
 }
 
 .center-block h2, h4 {
-  color: #c495fd;
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
 }
 
+.center-block h4 {
+  color: #aaaaaa;
+}
+
+.center-block p {
+  padding-bottom: 10px;
+}
+
 #addButton {
   background: none;
-  border: none;
-  padding: 0;
+  padding: 5px;
   font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
   color: #c495fd;
   cursor: pointer;
   margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  height: 35px;
+  align-self: flex-start;
+}
+
+#addButton:hover {
+  background: #c495fd;
+  color: #121212;
+}
+
+.collapsible {
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  padding-bottom: 10px;
+}
+
+.collapsible span {
+  color: #c495fd;
+}
+
+.collapsible span:hover,
+.collapsible span:active{
+  border-bottom: 1px solid #c495fd;
+}
+
+.content {
+  display: none;
+  overflow: hidden;
 }
 
 .right-block {
@@ -207,13 +256,17 @@ h4 {
 
 .right-block__header {
   padding: 8px 20px;
-  border-bottom: 2px solid #c495fd;
-
+  background: #383838;
+  border-bottom: #c495fd;
 }
 
 .read-list__item {
   border-bottom: 2px solid #c495fd;
   padding: 10px 20px;
+}
+
+.read-list__author {
+  color: #aaaaaa;
 }
 
 .mark-btn {
@@ -227,7 +280,7 @@ h4 {
 }
 
 .marked-item {
-  background: #688b21;
+  background: #251f2d;
   color: white;
   padding: 20px;
 }
@@ -240,22 +293,4 @@ h4 {
   color: #c495fd;
   cursor: pointer;
   margin-right: 10px;
-}
-
-.collapsible {
-  cursor: pointer;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-}
-
-.collapsible:hover,
-.collapsible:active{
-  background: #251f2d;
-}
-
-.content {
-  display: none;
-  overflow: hidden;
 }
