@@ -80,7 +80,6 @@ class BooksUI {
       this.displayBookInfo(this.currBook);
     });
 
-    // this.setAddButtonListener();
     this.setMarkRemoveButtonListener();
   }
 
@@ -91,18 +90,19 @@ class BooksUI {
     });
   }
 
-  setAddButtonListener() {
+   setAddButtonListener() {
     this.addButton = document.getElementById("addButton");
-    this.addButton.addEventListener("click", (event) => {
+    this.addButton.addEventListener("click", event => {
       if (this.currBook != null) {
         console.log(this.currBook);
         event.preventDefault();
         let div = document.createElement("div");
         div.classList.add("read-list__item");
+        let authors = this.currBook && this.currBook.author_name
+            ? this.currBook.author_name.join(", ")
+            : "N/A";
         div.innerHTML = `<p class="read-list__title">${this.currBook.title}</p>
-          <p class="read-list__author">${this.currBook.author_name.join(
-            ", "
-          )}</p>
+          <p class="read-list__author">${authors}</p>
           <button class="mark-btn">Mark as read</button><button class="remove-btn">Remove from list</button>`;
         this.readList.appendChild(div);
         this.saveLocalBooks(div.innerHTML);

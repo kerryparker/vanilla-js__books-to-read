@@ -49,13 +49,13 @@ h4 {
   border: 1px solid #121212;
   border-radius: 6px;
   outline: none;
-  padding: 3px;
+  padding-left: 10px; 
   align-self: baseline;
   width: auto;
   background: #2c2c2c;
   color: white;
   font-family: "Roboto", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .search-input:hover,
@@ -69,7 +69,7 @@ h4 {
   border-radius: 5px;
   color: #c495fd;
   background: #2d2e2f;
-  height: 34px;
+  height: 35px;
   width: 45px;
   margin-top: 5px;
   font-family: "Roboto", sans-serif;
@@ -115,14 +115,14 @@ h4 {
   background: #121212;
   min-width: 245px;
   color: white;
-  /* padding: 20px; */
   display: flex;
   justify-content: center;
   flex-direction: column-reverse;
 }
 
 .nav-bar p {
-  padding-left: 10px;
+  padding-left: 20px;
+  font-size: 14px;
 }
 
 .nav-bar span {
@@ -142,11 +142,12 @@ h4 {
   padding: 8px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   color: #c495fd;
   background: #2d2e2f;
   cursor: pointer;
   height: 33px;
+  width: 60px;
   margin-left: 20px;
   margin-top: 5px;
 }
