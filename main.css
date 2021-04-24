@@ -36,21 +36,19 @@ h4 {
 .search-bar {
   background: #121212;
   min-width: 245px;
-  height: 10%;
+  height: 9%;
   display: flex;
   justify-content: center;
-  padding: 5px;
+  align-items: center;
 }
 
 .search-input {
   height: 35px;
-  margin-top: 5px;
   margin-right: 5px;
   border: 1px solid #121212;
   border-radius: 6px;
   outline: none;
   padding-left: 10px; 
-  align-self: baseline;
   width: auto;
   background: #2c2c2c;
   color: white;
@@ -71,7 +69,6 @@ h4 {
   background: #2d2e2f;
   height: 35px;
   width: 45px;
-  margin-top: 5px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -85,10 +82,10 @@ h4 {
 
 .left-block {
   background: #18161b;
-  padding: 20px 20px;
+  padding: 5px 20px;
   overflow-y: auto;
   scrollbar-color: black #383838;
-  height: 77%;
+  height: 78%;
 }
 .book-short {
   padding: 5px;
@@ -206,11 +203,11 @@ h4 {
 }
 
 #addButton {
-  background: none;
-  padding: 5px;
+  background: #383838;
+  padding: 10px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   color: #c495fd;
   cursor: pointer;
   margin-top: 10px;
@@ -251,13 +248,15 @@ h4 {
 .right-block {
   flex: 0 1 25%;
   flex-direction: column;
-  background: #212121;
+  background: #18161b;
+  padding: 5px;
+  min-width: 165px;
+  overflow-y: auto;
 }
 
 .right-block__header {
   padding: 8px 20px;
-  background: #212121;
-  border-bottom: #c495fd;
+  background: #18161b;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -267,11 +266,11 @@ h4 {
   background: #383838;
   border-radius: 10px;
   padding: 20px 20px;
-  height: 75px;
+  margin-bottom: 5px;
+  height: fit-content;
   display: flex;
   flex-direction: row;
-  justify-content: first baseline; 
-  margin-bottom: 5px;
+  justify-content: space-between;
 }
 
 .read-list__item:hover {
@@ -282,14 +281,21 @@ h4 {
   color: #aaaaaa;
 }
 
+.read-list-btns {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
 .mark-btn, 
 .remove-btn{
   background: #414040;
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 5px;
-  width: 35px;
-  height: 35px;
+  min-width: 35px;
+  min-height: 35px;
+  max-height: 35px;
   color: #c495fd;
   cursor: pointer;
 }
@@ -300,10 +306,18 @@ h4 {
   color: #121212;
 }
 
+.remove-btn {
+  margin-left: 5px;
+}
+
 .marked-item {
   background: #251f2d;
   color: white;
   padding: 20px;
+}
+
+.marked-item:hover {
+  background: #251f2d;
 }
 
 .fa-minus-square,
