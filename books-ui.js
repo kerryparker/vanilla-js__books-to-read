@@ -124,8 +124,10 @@ class BooksUI {
         this.btnBookCounter.innerText = this.bookCounter;
       } else if (item.className === "mark-btn") {
         listItem.classList.toggle("marked-item");
+        this.markLocalBooks(listItem.innerHTML);
         this.doneCounter++;
         this.btnDoneCounter.innerText = this.doneCounter;
+        
         let removeButton = listItem.querySelector(".remove-btn");
         removeButton.remove();
         item.remove();
@@ -251,6 +253,18 @@ class BooksUI {
     }
     const itemIndex = item;
     items.splice(items.indexOf(itemIndex), 1);
+    localStorage.setItem("items", JSON.stringify(items));
+  }
+
+  markLocalBooks(item) {
+    let items;
+    if (localStorage.getItem("items") === null) {
+      items = [];
+    } else {
+      items = JSON.parse(localStorage.getItem("items"));
+    }
+    const itemIndex = item;
+    items.splice(items.indexOf(itemIndex), 1, itemIndex);
     localStorage.setItem("items", JSON.stringify(items));
   }
 }
