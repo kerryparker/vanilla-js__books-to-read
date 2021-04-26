@@ -1,13 +1,4 @@
-class Api {
-  async searchBooks(query, pageNum) {
-    let booksPage = await fetch(
-      `https://openlibrary.org/search.json?q=${query}&page=${pageNum}`
-    );
-    return await booksPage.json();
-  }
-}
-
-class BooksUI {
+export class BooksUI {
   /* left panel */
   goBtn = document.getElementById("goButton");
   input = document.getElementById("searchInput");
@@ -34,13 +25,19 @@ class BooksUI {
     this.api = api;
     this.collapseHelper = collapseHelper;
     this.setListeners();
-    this.getLocalBooks();
+    this.addLocalBooks();
   }
 
   setListeners() {
     this.goBtn.addEventListener("click", () => {
       this.searchBooks();
     });
+
+    this.input.addEventListener("keyup", (e) => {
+      if (e.code === "Enter") {
+      this.searchBooks();
+      }
+    })
 
     this.prevBtn.addEventListener("click", () => {
       if (this.page > 1) {
@@ -59,9 +56,9 @@ class BooksUI {
       }
     });
 
-    this.booksResults.addEventListener("click", (event) => {
+    this.booksResults.addEventListener("click", event => {
       const bookId = event.target.id;
-      this.currBook = this.booksResponse.docs.find((b) => b.id === bookId);
+      this.currBook = this.booksResponse.docs.find(b => b.id === bookId);
       if (!this.currBook) {
         // click on something else
         return false;
@@ -84,26 +81,31 @@ class BooksUI {
   }
 
   searchBooks() {
-    this.api.searchBooks(this.input.value, this.page).then((booksPage) => {
+    this.api.searchBooks(this.input.value, this.page).then(booksPage => {
       this.processBooksPage(booksPage);
       this.updateBottomNavBar(booksPage);
     });
   }
 
-   setAddButtonListener() {
+  setAddButtonListener() {
     this.addButton = document.getElementById("addButton");
     this.addButton.addEventListener("click", event => {
-      if (this.currBook != null) {
+      if (this.currBook != null && !this.isBookAdded()) {
         console.log(this.currBook);
         event.preventDefault();
         let div = document.createElement("div");
         div.classList.add("read-list__item");
-        let authors = this.currBook && this.currBook.author_name
+        let subtitle = this.currBook.subtitle ? this.currBook.subtitle : "";
+        let authors =
+          this.currBook && this.currBook.author_name
             ? this.currBook.author_name.join(", ")
             : "N/A";
-        div.innerHTML = `<div><p class="read-list__title">${this.currBook.title}</p>
+        div.innerHTML = `<div>
+          <p class="read-list__title">${this.currBook.title}</p>
+          <p>${subtitle}</p>
           <p class="read-list__author">${authors}</p></div>
           <div class="read-list-btns"><button class="mark-btn"><i class="fas fa-check"></i></button><button class="remove-btn"><i class="fas fa-minus-square"></i></button></div>`;
+
         this.readList.appendChild(div);
         this.saveLocalBooks(div.innerHTML);
         this.bookCounter++;
@@ -113,7 +115,7 @@ class BooksUI {
   }
 
   setMarkRemoveButtonListener() {
-    this.readList.addEventListener("click", (event) => {
+    this.readList.addEventListener("click", event => {
       const item = event.target;
       const listItem = item.parentElement.parentElement;
       console.log(`className: ${item.className}`);
@@ -123,11 +125,12 @@ class BooksUI {
         this.bookCounter--;
         this.btnBookCounter.innerText = this.bookCounter;
       } else if (item.className === "mark-btn") {
+        this.removeLocalBooks(listItem.innerHTML);
         listItem.classList.toggle("marked-item");
-        
+
         this.doneCounter++;
         this.btnDoneCounter.innerText = this.doneCounter;
-        
+
         let removeButton = listItem.querySelector(".remove-btn");
         removeButton.remove();
         item.remove();
@@ -138,7 +141,7 @@ class BooksUI {
 
   processBooksPage(booksPage) {
     this.booksResponse = booksPage;
-    this.booksResponse.docs.forEach((item) => {
+    this.booksResponse.docs.forEach(item => {
       item.id = item.key.split("/").pop();
     });
     let elementsStr = this.booksResponse.docs.reduce((acc, curr) => {
@@ -170,6 +173,7 @@ class BooksUI {
     } else {
       bookInfoHolder.innerHTML = this.getBookingInfoHtml(bookInfo, -1);
     }
+
     this.setAddButtonListener();
     this.collapseHelper.setCollapsing("collapsible");
   }
@@ -215,17 +219,19 @@ class BooksUI {
     return result;
   }
 
-  saveLocalBooks(item) {
-    let items;
-    if (localStorage.getItem("items") === null) {
-      items = [];
-    } else {
-      items = JSON.parse(localStorage.getItem("items"));
-    }
-
-    items.push(item);
-    localStorage.setItem("items", JSON.stringify(items));
-    //localStorage.clear();
+  isBookAdded() {
+    let authors =
+      this.currBook && this.currBook.author_name
+        ? this.currBook.author_name.join(", ")
+        : "N/A";
+    let storedBooks = this.getLocalBooks();
+    let result = false;
+    storedBooks.forEach(book => {
+      if (book.includes(`${this.currBook.title}`) && book.includes(authors)) {
+        result = true;
+      }
+    });
+    return result;
   }
 
   getLocalBooks() {
@@ -235,7 +241,19 @@ class BooksUI {
     } else {
       items = JSON.parse(localStorage.getItem("items"));
     }
-    items.forEach((item) => {
+    return items;
+  }
+
+  saveLocalBooks(item) {
+    let items = this.getLocalBooks();
+    items.push(item);
+    localStorage.setItem("items", JSON.stringify(items));
+    //localStorage.clear();
+  }
+
+  addLocalBooks() {
+    let items = this.getLocalBooks();
+    items.forEach(item => {
       let div = document.createElement("div");
       div.classList.add("read-list__item");
       if (!item.includes("</button>")) {
@@ -251,14 +269,8 @@ class BooksUI {
   }
 
   removeLocalBooks(item) {
-    let items;
-    if (localStorage.getItem("items") === null) {
-      items = [];
-    } else {
-      items = JSON.parse(localStorage.getItem("items"));
-    }
-    const itemIndex = item;
-    items.splice(items.indexOf(itemIndex), 1);
+    let items = this.getLocalBooks();
+    items.splice(items.indexOf(item), 1);
     localStorage.setItem("items", JSON.stringify(items));
   }
 
@@ -266,31 +278,18 @@ class BooksUI {
     let items;
     if (localStorage.getItem("items") === null) {
       items = [];
+      console.log("items === null");
     } else {
       items = JSON.parse(localStorage.getItem("items"));
+      console.log(`items size: ${items.length}`);
     }
-    const itemIndex = item;
-    items.splice(items.indexOf(itemIndex), 1, itemIndex);
+    let idx = items.indexOf(item);
+    if (idx != -1) {
+      items.splice(idx, 1, item);
+    } else {
+      items.push(item);
+    }
+
     localStorage.setItem("items", JSON.stringify(items));
-    console.log(itemIndex);
   }
 }
-
-class CollapseHelper {
-  setCollapsing(className) {
-    let collapse = document.getElementsByClassName(className);
-    for (let i = 0; i < collapse.length; i++) {
-      collapse[i].addEventListener("click", function () {
-        this.classList.toggle("active");
-        let content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-      });
-    }
-  }
-}
-
-const bookListComponent = new BooksUI(new Api(), new CollapseHelper());
