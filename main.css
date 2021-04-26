@@ -72,6 +72,7 @@ h4 {
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   font-size: 16px;
+  outline: none;
 }
 
 #goButton:hover,
@@ -86,7 +87,14 @@ h4 {
   overflow-y: auto;
   scrollbar-color: black #383838;
   height: 78%;
+  display: flex;
+  flex-direction: column;
 }
+
+.lds-default {
+  align-self: center;
+}
+
 .book-short {
   padding: 5px;
   border: 1px solid #18161b;
@@ -147,6 +155,7 @@ h4 {
   width: 60px;
   margin-left: 20px;
   margin-top: 5px;
+  outline: none;
 }
 
 .nav-next-btn {
@@ -215,6 +224,7 @@ h4 {
   border-radius: 5px;
   height: 35px;
   align-self: flex-start;
+  outline: none;
 }
 
 #addButton:hover {
@@ -298,6 +308,7 @@ h4 {
   max-height: 35px;
   color: #c495fd;
   cursor: pointer;
+  outline: none;
 }
 
 .mark-btn:hover, 

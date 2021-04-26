@@ -5,6 +5,7 @@ export class BooksUI {
   booksResults = document.getElementById("searchResultHolder");
   prevBtn = document.querySelector(".nav-prev-btn");
   nextBtn = document.querySelector(".nav-next-btn");
+  loader = document.querySelector(".lds-default");
   /* center panel */
   bookInfoHolder = document.getElementById("bookInfoHolder");
   /* right panel */
@@ -23,6 +24,7 @@ export class BooksUI {
 
   constructor(api, collapseHelper) {
     this.api = api;
+    this.loader.style.display = "none";
     this.collapseHelper = collapseHelper;
     this.setListeners();
     this.addLocalBooks();
@@ -30,17 +32,23 @@ export class BooksUI {
 
   setListeners() {
     this.goBtn.addEventListener("click", () => {
+      this.loader.style.display = "flex";
+      this.booksResults.style.display = "none";
       this.searchBooks();
     });
 
     this.input.addEventListener("keyup", (e) => {
       if (e.code === "Enter") {
+      this.loader.style.display = "flex";
+      this.booksResults.style.display = "none";
       this.searchBooks();
       }
     })
 
     this.prevBtn.addEventListener("click", () => {
       if (this.page > 1) {
+        this.loader.style.display = "flex";
+        this.booksResults.style.display = "none";
         this.page--;
         this.searchBooks();
       }
@@ -51,6 +59,8 @@ export class BooksUI {
         this.booksResponse &&
         this.booksResponse.start + 100 <= this.booksResponse.numFound
       ) {
+        this.loader.style.display = "flex";
+        this.booksResults.style.display = "none";
         this.page++;
         this.searchBooks();
       }
@@ -141,6 +151,8 @@ export class BooksUI {
 
   processBooksPage(booksPage) {
     this.booksResponse = booksPage;
+    this.loader.style.display = "none";
+    this.booksResults.style.display = "initial";
     this.booksResponse.docs.forEach(item => {
       item.id = item.key.split("/").pop();
     });
