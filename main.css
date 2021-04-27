@@ -260,7 +260,7 @@ h4 {
   flex-direction: column;
   background: #18161b;
   padding: 5px;
-  min-width: 165px;
+  min-width: 170px;
   overflow-y: auto;
 }
 
@@ -281,6 +281,8 @@ h4 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .read-list__item:hover {
@@ -289,6 +291,10 @@ h4 {
 
 .read-list__author {
   color: #aaaaaa;
+}
+
+.read-list__text {
+  max-width: 220px;
 }
 
 .read-list-btns {

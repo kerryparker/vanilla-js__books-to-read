@@ -1,3 +1,14 @@
+String.prototype.escapeXSS = function() {
+  var tagsToReplace = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;"
+  };
+  return this.replace(/[&<>]/g, function(tag) {
+    return tagsToReplace[tag] || tag;
+  });
+};
+
 export class BooksUI {
   /* left panel */
   goBtn = document.getElementById("goButton");
@@ -110,7 +121,7 @@ export class BooksUI {
           this.currBook && this.currBook.author_name
             ? this.currBook.author_name.join(", ")
             : "N/A";
-        div.innerHTML = `<div>
+        div.innerHTML = `<div class="read-list__text">
           <p class="read-list__title">${this.currBook.title}</p>
           <p>${subtitle}</p>
           <p class="read-list__author">${authors}</p></div>
@@ -154,7 +165,8 @@ export class BooksUI {
     this.loader.style.display = "none";
     this.booksResults.style.display = "initial";
     this.booksResponse.docs.forEach(item => {
-      item.id = item.key.split("/").pop();
+      item.id = item.key.split("/").pop().escapeXSS();
+      item.title = item.title.escapeXSS();
     });
     let elementsStr = this.booksResponse.docs.reduce((acc, curr) => {
       return (
@@ -191,42 +203,47 @@ export class BooksUI {
   }
 
   getBookingInfoHtml(bookInfo, type) {
-    let subtitle = "";
-    if (bookInfo.subtitle != null) {
-      subtitle = bookInfo.subtitle;
-    }
+    let subtitle = 
+    bookInfo && bookInfo.subtitle ? bookInfo.subtitle.escapeXSS() : "";
     let authors =
-      bookInfo && bookInfo.author_name
+      (bookInfo && bookInfo.author_name
         ? bookInfo.author_name.join(", ")
-        : "N/A";
+        : "N/A").escapeXSS();
+        let title = bookInfo.title.escapeXSS();
+    let publisher =
+      bookInfo && bookInfo.publisher
+        ? bookInfo.publisher.join(", ").escapeXSS()
+        : "";
+    let isbn =
+      bookInfo && bookInfo.isbn ? bookInfo.isbn.join(", ").escapeXSS() : "";
     let result = `
         <h2>${bookInfo.title}</h2>
         <h4>${subtitle}</h4>
         <h4>By ${authors}</h4>
         <p>Full text available: ${bookInfo.has_fulltext}</p>
         <p>Type: ${bookInfo.type}</p>`;
-    switch (type) {
-      case 1:
-        result += `<p class="collapsible">Publisher: <span>Click to show</span></p>
-          <div class="content"><p>${bookInfo.publisher.join(", ")}</p></div>
-          <p class="collapsible">ISBN: <span>Click to show</span></p>
-          <div class="content"><p>${bookInfo.isbn.join(", ")}</p></div>`;
-        break;
-      case 2:
-        result += `<p class="collapsible">Publisher: <span>Click to show</span></p>
-        <div class="content"> <p>${bookInfo.publisher.join(", ")}</p></div>
-        <p>ISBN: <b>${bookInfo.isbn.join(", ")}</b></p>`;
-        break;
-      case 3:
-        result += `<p>Publisher: ${bookInfo.publisher.join(", ")}</p>
-        <p class="collapsible">ISBN: <span>Click to show</span></p>
-        <div class="content"><p>${bookInfo.isbn.join(", ")}</p></div>`;
-        break;
-      case 4:
-        result += `<p>Publisher: ${bookInfo.publisher.join(", ")}</p>
-        <p>ISBN: ${bookInfo.isbn.join(", ")}</p>`;
-        break;
-    }
+        switch (type) {
+          case 1:
+            result += `<p class="collapsible">Publisher: <span>Click to show</span></p>
+              <div class="content"><p>${publisher}</p></div>
+              <p class="collapsible">ISBN: <span>Click to show</span></p>
+              <div class="content"><p>${isbn}</p></div>`;
+            break;
+          case 2:
+            result += `<p class="collapsible">Publisher: <span>Click to show</span></p>
+            <div class="content"> <p>${publisher}</p></div>
+            <p>ISBN: <b>${isbn}</b></p>`;
+            break;
+          case 3:
+            result += `<p>Publisher: ${publisher}</p>
+            <p class="collapsible">ISBN: <span>Click to show</span></p>
+            <div class="content"><p>${isbn}</p></div>`;
+            break;
+          case 4:
+            result += `<p>Publisher: ${publisher}</p>
+            <p>ISBN: ${isbn}</p>`;
+            break;
+        }
     result += `<button id="addButton">Add book to Read List</button>`;
     return result;
   }
@@ -260,7 +277,6 @@ export class BooksUI {
     let items = this.getLocalBooks();
     items.push(item);
     localStorage.setItem("items", JSON.stringify(items));
-    //localStorage.clear();
   }
 
   addLocalBooks() {
